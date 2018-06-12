@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.maxaramos.apiserver.dao.AuthTokenDao;
 import com.maxaramos.apiserver.dao.UserDao;
-import com.maxaramos.apiserver.model.security.AuthToken;
+import com.maxaramos.apiserver.model.AuthToken;
 
 @Service
 public class AuthService {
@@ -24,13 +24,13 @@ public class AuthService {
 	private Encoder base64Encoder;
 
 	@Autowired
+	private ApplicationContext applicationContext;
+
+	@Autowired
 	private UserDao userDao;
 
 	@Autowired
 	private AuthTokenDao authTokenDao;
-
-	@Autowired
-	private ApplicationContext applicationContext;
 
 	public String generateToken(String username) {
 		UserDetails user = userDao.findByUsername(username);

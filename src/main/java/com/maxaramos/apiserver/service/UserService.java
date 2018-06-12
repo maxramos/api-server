@@ -8,7 +8,6 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +18,6 @@ import com.maxaramos.apiserver.dao.UserDao;
 
 @Service
 public class UserService {
-
-	@Autowired
-	private Logger log;
 
 	@Autowired
 	private Decoder base64Decoder;
@@ -47,9 +43,8 @@ public class UserService {
 		String username = jsonObj.getString("username");
 		String tokenId = jsonObj.getString("tokenId");
 		Instant expiry = Instant.ofEpochMilli(jsonObj.getLong("expiry"));
-		Instant currentTimestamp = Instant.now();
 
-		if (!expiry.isAfter(currentTimestamp) && authTokenDao.isExpired(tokenId)) {
+		if (!expiry.isAfter(Instant.now()) && authTokenDao.isExpired(tokenId)) {
 			return null;
 		}
 
@@ -64,8 +59,7 @@ public class UserService {
 			byte[] decryptedToken = applicationContext.getBean("aesDecryptor", Cipher.class).doFinal(decodedEncryptedToken);
 			return new String(decryptedToken);
 		} catch (IllegalArgumentException | IllegalBlockSizeException | BadPaddingException e) {
-			log.error("Error in decrypting token.", e);
-			return null;
+			throw new RuntimeException(e);
 		}
 	}
 

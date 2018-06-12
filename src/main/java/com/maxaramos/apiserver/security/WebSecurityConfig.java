@@ -1,7 +1,6 @@
 package com.maxaramos.apiserver.security;
 
 import java.security.InvalidKeyException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Base64.Decoder;
@@ -87,20 +86,6 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
-	@Scope("prototype")
-	public MessageDigest messageDigest() {
-		MessageDigest md = null;
-
-		try {
-			md = MessageDigest.getInstance("SHA");
-		} catch (NoSuchAlgorithmException e) {
-			new RuntimeException("Cannot create message digest.", e);
-		}
-
-		return md;
-	}
-
-	@Bean
 	public OAuth2LoginSuccessHandler loginSuccessHandlerBean(AuthService authService) {
 		OAuth2LoginSuccessHandler loginSuccessHandler = new OAuth2LoginSuccessHandler(loginSuccessUrl, authService);
 		loginSuccessHandler.setAlwaysUseDefaultTargetUrl(true);
@@ -157,14 +142,14 @@ public class WebSecurityConfig {
 				.requestMatchers()
 					.antMatchers("/api/**")
 					.and()
-					.authorizeRequests()
-						.anyRequest().authenticated()
-						.and()
-					.addFilterAt(authTokenProcessingFilter, AbstractPreAuthenticatedProcessingFilter.class)
-					.exceptionHandling()
-						.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
-						.and()
-					.csrf().disable();
+				.authorizeRequests()
+					.anyRequest().authenticated()
+					.and()
+				.addFilterAt(authTokenProcessingFilter, AbstractPreAuthenticatedProcessingFilter.class)
+				.exceptionHandling()
+					.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+					.and()
+				.csrf().disable();
 
 		}
 	}

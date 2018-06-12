@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
-import com.maxaramos.apiserver.model.security.AuthToken;
+import com.maxaramos.apiserver.model.AuthToken;
 
 @Repository
 public class AuthTokenDao {
@@ -21,10 +21,18 @@ public class AuthTokenDao {
 	}
 
 	public boolean isExpired(String tokenId) {
+		if (!map.containsKey(tokenId)) {
+			return true;
+		}
+
 		return map.get(tokenId).getExpiry().isAfter(Instant.now());
 	}
 
 	public void refreshExpiry(String tokenId) {
+		if (!map.containsKey(tokenId)) {
+			return;
+		}
+
 		map.get(tokenId).setExpiry(AuthToken.calculateExpiry(30));
 	}
 

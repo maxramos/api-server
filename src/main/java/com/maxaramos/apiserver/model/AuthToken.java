@@ -1,4 +1,4 @@
-package com.maxaramos.apiserver.model.security;
+package com.maxaramos.apiserver.model;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -47,6 +47,11 @@ public class AuthToken {
 
 	public void setExpiry(Instant expiry) {
 		this.expiry = expiry;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("AuthToken [tokenId=%s, user=%s, expiry=%s]", tokenId, user, expiry);
 	}
 
 }

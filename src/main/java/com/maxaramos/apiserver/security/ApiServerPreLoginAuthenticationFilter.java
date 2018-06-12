@@ -65,6 +65,10 @@ public class ApiServerPreLoginAuthenticationFilter extends OncePerRequestFilter 
 		additionalParameters.put(OAuth2ParameterNames.REGISTRATION_ID, clientRegistration.getRegistrationId());
 		String state = request.getParameter(STATE_ATTR_NAME);
 
+		if (state == null) {
+			throw new IllegalArgumentException("Missing request param: state");
+		}
+
 		OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.authorizationCode();
 		OAuth2AuthorizationRequest authorizationRequest = builder
 				.clientId(clientRegistration.getClientId())

@@ -18,7 +18,12 @@ public class PublicResourceController {
 	@GetMapping("token")
 	public String token(HttpServletRequest request, Model model) {
 		try {
-			model.addAttribute("token", URLEncoder.encode(request.getParameter("token"), StandardCharsets.UTF_8.toString()));
+			String token = request.getParameter("token");
+
+			if (token != null) {
+				model.addAttribute("token", URLEncoder.encode(token, StandardCharsets.UTF_8.toString()));
+			}
+
 			return "token";
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
