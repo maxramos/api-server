@@ -15,8 +15,7 @@ public class AuthTokenDao {
 	private Map<String, AuthToken> map = new ConcurrentHashMap<>();
 
 	public AuthToken generate(UserDetails user) {
-		Instant expiry = Instant.now();
-		AuthToken authToken = new AuthToken(Long.toString(expiry.toEpochMilli()), user, expiry);
+		AuthToken authToken = new AuthToken(Long.toString(Instant.now().toEpochMilli()), user, 30);
 		map.put(authToken.getTokenId(), authToken);
 		return authToken;
 	}

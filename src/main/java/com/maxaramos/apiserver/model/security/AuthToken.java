@@ -1,8 +1,6 @@
 package com.maxaramos.apiserver.model.security;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,14 +15,14 @@ public class AuthToken {
 		super();
 	}
 
-	public AuthToken(String tokenId, UserDetails user, Instant expiry) {
+	public AuthToken(String tokenId, UserDetails user, long timeout) {
 		this.tokenId = tokenId;
 		this.user = user;
-		this.expiry = expiry;
+		expiry = AuthToken.calculateExpiry(timeout);
 	}
 
-	public static Instant calculateExpiry(int timeout) {
-		return LocalDateTime.now(ZoneOffset.UTC).plus(timeout, ChronoUnit.MINUTES).toInstant(ZoneOffset.UTC);
+	public static Instant calculateExpiry(long timeout) {
+		return Instant.now().plus(timeout, ChronoUnit.MINUTES);
 	}
 
 	public String getTokenId() {
