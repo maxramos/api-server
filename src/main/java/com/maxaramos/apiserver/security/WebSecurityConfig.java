@@ -22,6 +22,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
@@ -93,7 +94,6 @@ public class WebSecurityConfig {
 	}
 
 	@Configuration
-	@Order(Ordered.HIGHEST_PRECEDENCE)
 	public static class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Autowired
@@ -131,6 +131,7 @@ public class WebSecurityConfig {
 	}
 
 	@Configuration
+	@Order(Ordered.HIGHEST_PRECEDENCE)
 	public static class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Autowired
@@ -148,6 +149,9 @@ public class WebSecurityConfig {
 				.addFilterAt(authTokenProcessingFilter, AbstractPreAuthenticatedProcessingFilter.class)
 				.exceptionHandling()
 					.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+					.and()
+				.sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 				.csrf().disable();
 
