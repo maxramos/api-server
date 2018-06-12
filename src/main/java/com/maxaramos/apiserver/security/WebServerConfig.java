@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebServerConfig {
 
-	@Value("${es.server.http.port}")
+	@Value("${as.server.http.port}")
 	private int httpPort;
 
 	@Value("${server.port}")
