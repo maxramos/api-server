@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/public")
 public class PublicResourceController {
 
-	@GetMapping("token")
+	@GetMapping("/token")
 	public String token(HttpServletRequest request, Model model) {
 		try {
 			String token = request.getParameter("token");
